@@ -1,29 +1,12 @@
-import readline from 'readline'
-import fs from 'fs'
-import path from 'path'
 import { z } from 'zod'
+import { readFileByLine } from '../lib/shared.mjs';
 
 const regex = new RegExp('(?=(one|two|three|four|five|six|seven|eight|nine))', 'gm')
-const stringToIntMap = new Map([["one", 1], ["two", 2], ["three", 3], ["four", 4], ["five", 5], ["six", 6], ["seven", 7], ["eight", 8], ["nine", 9]])
-
-async function readFileByLine() {
-    const lines = []
-
-    const readInterface = readline.createInterface({
-        input: fs.createReadStream(path.resolve('day-1/input.txt')),
-        output: process.stdout,
-        terminal: false
-    });
-
-    for await (const line of readInterface) {
-        lines.push(line)
-    }
-
-    return lines
-}
+const stringToIntMap = new Map([["one", 1], ["two", 2], ["three", 3], ["four", 4], ["five", 5], ["six", 6], ["seven", 7], ["eight", 8], ["nine", 9]]);
 
 (async () => {
-    const lines = await readFileByLine()
+    console.time('executed')
+    const lines = await readFileByLine('day-1/input.txt')
     const calibrationByLine = lines.map((line, i) => {
         const allDigitsInLine = []
 
@@ -70,4 +53,5 @@ async function readFileByLine() {
 
     const result = calibrationByLine.reduce((acc, curr) => acc + curr, 0)
     console.log(result)
+    console.timeEnd('executed')
 })()
