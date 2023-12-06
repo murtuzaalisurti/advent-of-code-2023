@@ -6,12 +6,12 @@ const totalCubesAtOnce = {
     blue: 14
 };
 
-const regex = new RegExp('(green|blue|red)', 'gm');
-
 (async () => {
+    console.time('exec');
     const games = await readFileByLine('day-2/input.txt')
-    // console.log(games)
     const cubeCountMappedToTheGameAndType = []
+    const validGames = []
+
     for (const game of games) {
         const splitGameNumberAndPlays = game.split(':').map(i => i.trim())
 
@@ -31,23 +31,26 @@ const regex = new RegExp('(green|blue|red)', 'gm');
             })
         }
 
-        // for (const match of splitGameNumberAndPlays[1].matchAll(regex)) {
-        //     console.log(match, match.index)
-        // }
         cubeCountMappedToTheGameAndType.push({
             number: splitGameNumberAndPlays[0].split(" ")[1],
             cubes: cubesFromAPlay
         })        
     }
 
-    const filteredGames = cubeCountMappedToTheGameAndType.filter(game => {
-        for (const [type, value] of Object.entries(game.cubes)) {
-            // console.log(type)
-            value.forEach(count => {
-                console.log(parseInt(count), totalCubesAtOnce[`${type}`])
-                return parseInt(count) <= totalCubesAtOnce[`${type}`]
-            })
-        }
-    })
-    console.log(JSON.stringify(filteredGames, null, 2))
+    for (const game of cubeCountMappedToTheGameAndType) {
+        let isValid = true
+        loop2: for (const [type, value] of Object.entries(game.cubes)) {
+            loop3: for (const count of value) {
+                if (parseInt(count) > totalCubesAtOnce[`${type}`]) {
+                    isValid = false
+                    break loop2;
+                }
+            }
+        };
+
+        isValid && validGames.push(game);
+    }
+    const sumOfValidGameNumbers = validGames.reduce((acc, curr) => acc + parseInt(curr.number), 0);
+    console.log(`\nres: `, sumOfValidGameNumbers);
+    console.timeEnd('exec');
 })()
