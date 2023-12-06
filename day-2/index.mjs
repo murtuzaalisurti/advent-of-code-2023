@@ -64,7 +64,7 @@ const partTwo = async () => {
     
     for (const game of cubeCountMappedToTheGameAndType) {
         const powersOfCubeInAGame = [];
-        loop2: for (const [type, value] of Object.entries(game.cubes)) {
+        for (const [type, value] of Object.entries(game.cubes)) {
             powersOfCubeInAGame.push(value.sort((a, b) => parseInt(a) - parseInt(b))[value.length - 1])
         };
         powersOfCubes.push(powersOfCubeInAGame.reduce((acc, curr) => acc * curr, 1))
