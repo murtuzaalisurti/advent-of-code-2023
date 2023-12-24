@@ -39,8 +39,12 @@ for (const [i, line] of lines.entries()) {
             })).includes(`${number} ${index}`, i + 1)
         })
 
-        numbersAroundSpecialCharsForCurrLineUnique.forEach(i => {
-            numHavingAdjSpecialChars.push(i.number)
+        numbersAroundSpecialCharsForCurrLineUnique.forEach(j => {
+            numHavingAdjSpecialChars.push({
+                line: i,
+                number: j.number,
+                index: j.index
+            })
         })
 
     } else if (i === lines.length - 1) {
@@ -75,8 +79,12 @@ for (const [i, line] of lines.entries()) {
             })).includes(`${number} ${index}`, i + 1)
         })
 
-        numbersAroundSpecialCharsForCurrLineUnique.forEach(i => {
-            numHavingAdjSpecialChars.push(i.number)
+        numbersAroundSpecialCharsForCurrLineUnique.forEach(j => {
+            numHavingAdjSpecialChars.push({
+                line: i,
+                number: j.number,
+                index: j.index
+            })
         })
 
     } else {
@@ -119,11 +127,104 @@ for (const [i, line] of lines.entries()) {
             })).includes(`${number} ${index}`, i + 1)
         })
 
-        numbersAroundSpecialCharsForCurrLineUnique.forEach(i => {
-            numHavingAdjSpecialChars.push(i.number)
+        numbersAroundSpecialCharsForCurrLineUnique.forEach(j => {
+            numHavingAdjSpecialChars.push({
+                line: i,
+                number: j.number,
+                index: j.index
+            })
         })
     }
 }
 
-const sum = numHavingAdjSpecialChars.reduce((acc, curr) => acc + parseInt(curr), 0)
+const starsWithAdjDigitsPerLine = []
+
+for (const [i, line] of lines.entries()) {
+    if (i !== 0 && i !== lines.length - 1) {
+        const starCharRegex = /\*/g;
+        const starMatchOfCurrLine = Array.from(line.matchAll(starCharRegex))
+        // console.log(`\n\n`, starMatchOfCurrLine)
+
+        const starsWithAdjDigits = []
+
+        starMatchOfCurrLine.forEach(star => {
+            const adjDigits = {
+                starIndex: null,
+                count: 0
+            }
+
+            if (line[star.index - 1].match(numbers)) {
+                adjDigits.count++;
+                adjDigits.starIndex = star.index
+
+            }
+
+            if (line[star.index + 1].match(numbers)) {
+                adjDigits.count++;
+                adjDigits.starIndex = star.index
+
+            }
+
+            if (lines[i - 1][star.index - 1].match(numbers)) {
+                adjDigits.count++;
+                adjDigits.starIndex = star.index
+
+            }
+
+            if (lines[i - 1][star.index].match(numbers)) {
+                adjDigits.count++;
+                adjDigits.starIndex = star.index
+
+            }
+
+            if (lines[i - 1][star.index + 1].match(numbers)) {
+                adjDigits.count++;
+                adjDigits.starIndex = star.index
+
+            }
+
+            if (lines[i + 1][star.index - 1].match(numbers)) {
+                adjDigits.count++;
+                adjDigits.starIndex = star.index
+            }
+
+            if (lines[i + 1][star.index].match(numbers)) {
+                adjDigits.count++;
+                adjDigits.starIndex = star.index
+            }
+
+            if (lines[i + 1][star.index + 1].match(numbers)) {
+                adjDigits.count++;
+                adjDigits.starIndex = star.index
+            }
+
+            if (lines[i + 1][star.index + 1].match(numbers)) {
+                adjDigits.starIndex = star.index
+            }
+
+            starsWithAdjDigits.push({
+                ...adjDigits
+            })
+
+        })
+        starsWithAdjDigitsPerLine.push({
+            line: i,
+            adjDigits: [
+                ...starsWithAdjDigits
+            ]
+        })
+
+    }
+}
+
+const starsWithExactlyTwoAdjDigitsPerLine = starsWithAdjDigitsPerLine.map(({ line, adjDigits }) => {
+    return {
+        line,
+        adjDigits: adjDigits.filter(i => i.count === 2)
+    }
+})
+console.log(JSON.stringify(starsWithExactlyTwoAdjDigitsPerLine[0], null, 2))
+
+console.log(numHavingAdjSpecialChars[2])
+const sum = numHavingAdjSpecialChars.reduce((acc, curr) => acc + parseInt(curr.number), 0)
 console.timeEnd('exec')
