@@ -14,29 +14,29 @@ const cardsWithTheirWinningCopies = Array.from({ length: lines.length }).map((_,
 function PartOne() {
     for (const [i, line] of lines.entries()) {
         const cardNumbers = line.split(":")[1].trim()
-    
+
         const winningNumbers = cardNumbers.split("|")[0].trim().split(" ").map(i => i.trim()).filter(j => parseInt(j)).map(k => parseInt(k))
         const numbersIhave = cardNumbers.split("|")[1].trim().split(" ").map(i => i.trim()).filter(j => parseInt(j)).map(k => parseInt(k))
-    
+
         let points = 0;
         let firstMatch = true;
         const matchingNumbers = []
-    
+
         for (const win of winningNumbers) {
             if (numbersIhave.includes(win)) {
                 matchingNumbers.push(win)
-    
+
                 if (!firstMatch) {
                     points = points * 2
                 } else {
                     points++;
                 }
-    
+
                 firstMatch = false;
             }
-    
+
         }
-    
+
         cardsWithTheirPoints[i] = {
             matchingNumbers,
             points,
@@ -53,27 +53,27 @@ function PartTwo() {
         function calc(index, line) {
             const card = index + 1;
             const cardNumbers = line.split(":")[1].trim()
-            
+
             const winningNumbers = cardNumbers.split("|")[0].trim().split(" ").map(i => i.trim()).filter(j => parseInt(j)).map(k => parseInt(k))
-            const numbersIhave = cardNumbers.split("|")[1].trim().split(" ").map(i => i.trim()).filter(j => parseInt(j)).map(k => parseInt(k))        
+            const numbersIhave = cardNumbers.split("|")[1].trim().split(" ").map(i => i.trim()).filter(j => parseInt(j)).map(k => parseInt(k))
             const matchingNumbers = []
-            
-        
+
+
             for (const win of winningNumbers) {
                 if (numbersIhave.includes(win)) {
                     matchingNumbers.push(win)
                 }
             }
-        
-            if (matchingNumbers.length > 0) {            
-                const nextcards = Array.from({length: ((matchingNumbers.length + card) - card)/1 + 1}, (_, t) => card + t * 1).slice(1);
-    
+
+            if (matchingNumbers.length > 0) {
+                const nextcards = Array.from({ length: ((matchingNumbers.length + card) - card) / 1 + 1 }, (_, t) => card + t * 1).slice(1);
+
                 for (const winningCopyNumber of nextcards) {
                     cardsWithTheirWinningCopies[winningCopyNumber - 1].copies.count++;
                 }
             }
         }
-    
+
         for (let copy = 0; copy < cardsWithTheirWinningCopies[index].copies.count; copy++) {
             calc(index, line);
         }
