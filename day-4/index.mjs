@@ -10,17 +10,21 @@ const cardsWithTheirWinningCopies = Array.from({ length: lines.length }).map((_,
     }
 }))
 
+function getNumbers(str, index) {
+    return str.split("|")[index].trim().split(" ").map(i => i.trim()).filter(j => parseInt(j)).map(k => parseInt(k))
+}
+
 // Part 1
 function PartOne() {
     for (const [i, line] of lines.entries()) {
-        const cardNumbers = line.split(":")[1].trim()
+        const cardNumbers = line.split(":")[1].trim();
 
-        const winningNumbers = cardNumbers.split("|")[0].trim().split(" ").map(i => i.trim()).filter(j => parseInt(j)).map(k => parseInt(k))
-        const numbersIhave = cardNumbers.split("|")[1].trim().split(" ").map(i => i.trim()).filter(j => parseInt(j)).map(k => parseInt(k))
+        const winningNumbers = getNumbers(cardNumbers, 0);
+        const numbersIhave = getNumbers(cardNumbers, 1);
 
         let points = 0;
         let firstMatch = true;
-        const matchingNumbers = []
+        const matchingNumbers = [];
 
         for (const win of winningNumbers) {
             if (numbersIhave.includes(win)) {
@@ -51,11 +55,11 @@ function PartTwo() {
     for (const [index, line] of lines.entries()) {
         function calc(index, line) {
             const card = index + 1;
-            const cardNumbers = line.split(":")[1].trim()
+            const cardNumbers = line.split(":")[1].trim();
 
-            const winningNumbers = cardNumbers.split("|")[0].trim().split(" ").map(i => i.trim()).filter(j => parseInt(j)).map(k => parseInt(k))
-            const numbersIhave = cardNumbers.split("|")[1].trim().split(" ").map(i => i.trim()).filter(j => parseInt(j)).map(k => parseInt(k))
-            const matchingNumbers = []
+            const winningNumbers = getNumbers(cardNumbers, 0);
+            const numbersIhave = getNumbers(cardNumbers, 1);
+            const matchingNumbers = [];
 
             for (const win of winningNumbers) {
                 if (numbersIhave.includes(win)) {
