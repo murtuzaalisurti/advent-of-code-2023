@@ -34,7 +34,6 @@ function PartOne() {
 
                 firstMatch = false;
             }
-
         }
 
         cardsWithTheirPoints[i] = {
@@ -57,7 +56,6 @@ function PartTwo() {
             const winningNumbers = cardNumbers.split("|")[0].trim().split(" ").map(i => i.trim()).filter(j => parseInt(j)).map(k => parseInt(k))
             const numbersIhave = cardNumbers.split("|")[1].trim().split(" ").map(i => i.trim()).filter(j => parseInt(j)).map(k => parseInt(k))
             const matchingNumbers = []
-
 
             for (const win of winningNumbers) {
                 if (numbersIhave.includes(win)) {
